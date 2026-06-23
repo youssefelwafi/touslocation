@@ -1,0 +1,40 @@
+flowchart LR
+    subgraph CLIENT["Navigateur — React SPA (VIEW)"]
+        direction TB
+        PAGES["Pages & Composants<br/>(Dashboard, Rentals, Settings...)"]
+        STATE["État & i18n<br/>(AuthContext, react-i18next)"]
+        AXIOS["api.js — Axios<br/>(token Bearer)"]
+        PAGES --> STATE --> AXIOS
+    end
+
+    subgraph LARAVEL["Laravel — API REST (Backend)"]
+        direction TB
+        ROUTES["routes/api.php"]
+        MW["Middleware<br/>auth:sanctum + TenantScoped"]
+        CTRL["Controllers<br/>(CONTROLLER)"]
+        REQ["Validation<br/>(Form Requests)"]
+        MODELS["Models Eloquent<br/>(MODEL)"]
+        BLADE["invoice.blade.php<br/>(VIEW — PDF)"]
+        ROUTES --> MW --> CTRL
+        CTRL --> REQ
+        CTRL --> MODELS
+        CTRL --> BLADE
+    end
+
+    DB[("MySQL / MariaDB")]
+    PDF["Facture PDF<br/>(dompdf)"]
+
+    AXIOS -->|"HTTP · JSON · Bearer"| ROUTES
+    CTRL -->|"JSON (réponse)"| AXIOS
+    MODELS <-->|"SQL (Eloquent ORM)"| DB
+    BLADE --> PDF
+    PDF -->|"téléchargement"| AXIOS
+
+    classDef view fill:#e3f0ff,stroke:#0071e3,color:#0a2540;
+    classDef ctrl fill:#fff4e3,stroke:#ff9500,color:#5c3b00;
+    classDef model fill:#e8fae8,stroke:#34c759,color:#0b3d1a;
+    classDef db fill:#f0f0f3,stroke:#6e6e73,color:#1d1d1f;
+    class PAGES,STATE,AXIOS,BLADE view;
+    class ROUTES,MW,CTRL,REQ ctrl;
+    class MODELS model;
+    class DB,PDF db;

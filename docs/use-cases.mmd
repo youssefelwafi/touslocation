@@ -1,0 +1,46 @@
+flowchart LR
+    SA(("Super-admin"))
+    MG(("Manager"))
+    EM(("Employe"))
+    CL(("Client"))
+
+    UC1(["S'authentifier"])
+    UC2(["Gerer le materiel & le stock"])
+    UC3(["Gerer les locations"])
+    UC4(["Gerer les paiements"])
+    UC5(["Gerer achats & fournisseurs"])
+    UC6(["Gerer les ventes"])
+    UC7(["Gerer les depenses"])
+    UC8(["Ajuster l'inventaire"])
+    UC9(["Consulter les rapports"])
+    UC10(["Gerer les parametres"])
+    UC11(["Gerer les managers"])
+    UC12(["Consulter le catalogue"])
+    UC13(["Suivre ses locations"])
+
+    SA --- UC1
+    MG --- UC1
+    EM --- UC1
+    CL --- UC1
+
+    SA --- UC11
+    SA --- UC9
+    MG --- UC2
+    MG --- UC3
+    MG --- UC4
+    MG --- UC5
+    MG --- UC6
+    MG --- UC7
+    MG --- UC8
+    MG --- UC9
+    MG --- UC10
+    EM --- UC2
+    EM --- UC3
+    EM --- UC4
+    CL --- UC12
+    CL --- UC13
+
+    classDef actor fill:#1d1d1f,stroke:#1d1d1f,color:#fff;
+    classDef uc fill:#e3f0ff,stroke:#0071e3,color:#0a2540;
+    class SA,MG,EM,CL actor;
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13 uc;

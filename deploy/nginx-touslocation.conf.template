@@ -1,0 +1,55 @@
+# TousLocation — configuration Nginx (générée par deploy.sh)
+# Frontend statique (SPA) servi à la racine ; API Laravel sous /api.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name __DOMAIN__;
+
+    # --- Frontend (React build) ---
+    root __FRONT__;
+    index index.html;
+
+    client_max_body_size 20M;
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # --- API Laravel ---
+    location /api {
+        root __BACK__;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    location /sanctum {
+        root __BACK__;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    location /login {
+        root __BACK__;
+        try_files $uri /index.php?$query_string;
+    }
+
+    # --- Fichiers publics (images, PDF, storage) ---
+    location /storage {
+        root __BACK__;
+        try_files $uri =404;
+        expires 7d;
+        access_log off;
+    }
+
+    # --- Exécution PHP (PHP-FPM) ---
+    location ~ \.php$ {
+        root __BACK__;
+        fastcgi_pass unix:/var/run/php/php__PHP__-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Bloque l'accès aux fichiers cachés
+    location ~ /\.(?!well-known) {
+        deny all;
+    }
+}

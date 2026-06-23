@@ -1,0 +1,31 @@
+flowchart TD
+    LOGIN["Connexion / Login"] --> LAYOUT{{"Layout — Sidebar + Topbar mobile + Toasts"}}
+
+    LAYOUT --> DASH["Tableau de bord · KPI + Kanban locations (drag & drop)"]
+    LAYOUT --> MAT["Materiel · catalogue, images, calendrier dispo"]
+    LAYOUT --> LOC["Locations · creation, paiements partiels, facture PDF"]
+    LAYOUT --> CLI["Clients"]
+    LAYOUT --> FOUR["Fournisseurs"]
+    LAYOUT --> ACH["Achats (approvisionnement)"]
+    LAYOUT --> VEN["Ventes"]
+    LAYOUT --> DEP["Depenses"]
+    LAYOUT --> AJU["Ajustements stock"]
+    LAYOUT --> RAP["Rapports · benefice + locations"]
+    LAYOUT --> SET["Parametres (onglets)"]
+    LAYOUT -. super-admin .-> USR["Managers"]
+
+    SET --> S1["TVA"]
+    SET --> S2["Devises"]
+    SET --> S3["Unites"]
+    SET --> S4["Categories"]
+    SET --> S5["Marques"]
+    SET --> S6["Types de paiement"]
+
+    LANG["Bascule FR / AR (RTL)"] -.-> LAYOUT
+
+    classDef op fill:#e3f0ff,stroke:#0071e3,color:#0a2540;
+    classDef cfg fill:#fff4e3,stroke:#ff9500,color:#5c3b00;
+    classDef root fill:#1d1d1f,stroke:#1d1d1f,color:#fff;
+    class LOGIN,LAYOUT root;
+    class DASH,MAT,LOC,CLI,FOUR,ACH,VEN,DEP,AJU,RAP,USR op;
+    class SET,S1,S2,S3,S4,S5,S6,LANG cfg;
