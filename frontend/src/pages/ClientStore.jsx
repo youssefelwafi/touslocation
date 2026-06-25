@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ImageIcon, CalendarPlus, Search, Store } from "lucide-react";
+import { ImageIcon, Search, Store, ShoppingCart, Plus, Minus, Trash2, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import api, { assetUrl } from "../api";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
-import { toast } from "../notify";
+import { toast, confirmDialog } from "../notify";
 import { formatMoney } from "../utils/format";
 
 const TAX = 20;
@@ -28,22 +28,22 @@ export default function ClientStore() {
 
   // Filtres
   const [search, setSearch] = useState("");
-  const [query, setQuery] = useState(""); // recherche appliquée (debounced)
+  const [query, setQuery] = useState("");
   const [shop, setShop] = useState("");
 
-  // Commande
-  const [sel, setSel] = useState(null);
-  const [form, setForm] = useState({ start: "", end: "", quantity: 1 });
+  // Panier (articles d'une seule boutique à la fois — contrainte backend).
+  const [cart, setCart] = useState([]); // [{ product, quantity }]
+  const [cartOpen, setCartOpen] = useState(false);
+  const [period, setPeriod] = useState({ start: "", end: "" });
   const [minDt, setMinDt] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Boutiques pour le filtre.
   useEffect(() => {
     api.get("/boutiques").then((r) => setShops(r.data)).catch(() => setShops([]));
   }, []);
 
-  // Recherche temporisée (debounce).
+  // Recherche temporisée.
   const debRef = useRef();
   useEffect(() => {
     clearTimeout(debRef.current);
@@ -51,7 +51,6 @@ export default function ClientStore() {
     return () => clearTimeout(debRef.current);
   }, [search]);
 
-  // Charge la 1re page à chaque changement de filtre.
   useEffect(() => {
     setLoading(true);
     api.get("/catalogue", { params: { search: query, boutique: shop || undefined, page: 1 } })
@@ -67,32 +66,66 @@ export default function ClientStore() {
       .finally(() => setLoadingMore(false));
   }
 
-  const days = useMemo(() => {
-    if (!form.start || !form.end) return 0;
-    const s = new Date(form.start); s.setHours(0, 0, 0, 0);
-    const e = new Date(form.end); e.setHours(0, 0, 0, 0);
-    const d = (e - s) / 86400000;
-    return d >= 0 ? d + 1 : 0;
-  }, [form]);
-  const totalEstimate = sel ? Number(sel.prix_par_jour) * Number(form.quantity || 1) * days * (1 + TAX / 100) : 0;
+  // --- Panier ---
+  const cartCount = cart.reduce((n, c) => n + c.quantity, 0);
+  const cartBoutique = cart[0]?.product.proprietaire;
+  const inCart = (id) => cart.find((c) => c.product.id === id);
 
-  function openRequest(p) {
-    const now = nowLocal();
-    setSel(p);
-    setForm({ start: now, end: now, quantity: 1 });
-    setMinDt(now);
+  async function addToCart(p) {
+    const boutiqueId = p.proprietaire?.id;
+    if (cart.length && cartBoutique?.id !== boutiqueId) {
+      if (!(await confirmDialog(t("store.cart_other_shop")))) return;
+      setCart([{ product: p, quantity: 1 }]);
+      toast(t("store.added"), "success");
+      return;
+    }
+    const existing = inCart(p.id);
+    const max = Number(p.quantite) || 99;
+    if (existing) {
+      setCart((c) => c.map((x) => (x.product.id === p.id ? { ...x, quantity: Math.min(x.quantity + 1, max) } : x)));
+    } else {
+      setCart((c) => [...c, { product: p, quantity: 1 }]);
+    }
+    toast(t("store.added"), "success");
+  }
+  function setQty(id, q) {
+    const item = inCart(id);
+    const max = Number(item?.product.quantite) || 99;
+    const qty = Math.max(1, Math.min(q, max));
+    setCart((c) => c.map((x) => (x.product.id === id ? { ...x, quantity: qty } : x)));
+  }
+  const removeFromCart = (id) => setCart((c) => c.filter((x) => x.product.id !== id));
+
+  function openCart() {
+    if (!period.start) { const now = nowLocal(); setPeriod({ start: now, end: now }); setMinDt(now); }
     setError("");
+    setCartOpen(true);
   }
 
-  async function submit(e) {
+  const days = useMemo(() => {
+    if (!period.start || !period.end) return 0;
+    const s = new Date(period.start); s.setHours(0, 0, 0, 0);
+    const e = new Date(period.end); e.setHours(0, 0, 0, 0);
+    const d = (e - s) / 86400000;
+    return d >= 0 ? d + 1 : 0;
+  }, [period]);
+
+  const subtotal = useMemo(
+    () => cart.reduce((s, c) => s + Number(c.product.prix_par_jour) * c.quantity * days, 0),
+    [cart, days]
+  );
+  const ttc = subtotal * (1 + TAX / 100);
+
+  async function checkout(e) {
     e.preventDefault();
+    if (!cart.length) return;
     setSaving(true); setError("");
     try {
       await api.post("/locations", {
-        date_debut: form.start, date_fin: form.end,
-        items: [{ materiel_id: sel.id, quantite: Number(form.quantity) }],
+        date_debut: period.start, date_fin: period.end,
+        items: cart.map((c) => ({ materiel_id: c.product.id, quantite: c.quantity })),
       });
-      setSel(null);
+      setCart([]); setCartOpen(false);
       toast(t("store.sent"), "success");
     } catch (err) {
       setError(err.response?.data?.message || t("common.error"));
@@ -103,10 +136,16 @@ export default function ClientStore() {
     <div>
       <div className="page-head">
         <h2>{t("store.marketplace")}</h2>
-        {!loading && <span className="muted">{total} {t("store.results")}</span>}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginInlineStart: "auto" }}>
+          {!loading && <span className="muted">{total} {t("store.results")}</span>}
+          <button className="cart-btn" onClick={openCart} title={t("store.cart")}>
+            <ShoppingCart size={18} />
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          </button>
+        </div>
       </div>
 
-      {/* Barre de filtres */}
+      {/* Filtres */}
       <div className="store-filters">
         <div className="search-field grow">
           <Search size={16} />
@@ -126,20 +165,25 @@ export default function ClientStore() {
       ) : (
         <>
           <div className="store-grid">
-            {products.map((p) => (
-              <div className="store-card" key={p.id}>
-                <div className="sc-thumb">
-                  {p.url_image ? <img src={assetUrl(p.url_image)} alt="" loading="lazy" /> : <ImageIcon size={28} />}
+            {products.map((p) => {
+              const qIn = inCart(p.id)?.quantity;
+              return (
+                <div className="store-card" key={p.id}>
+                  <div className="sc-thumb">
+                    {p.url_image ? <img src={assetUrl(p.url_image)} alt="" loading="lazy" /> : <ImageIcon size={28} />}
+                  </div>
+                  <div className="sc-body">
+                    <span className="sc-shop"><Store size={11} /> {p.proprietaire?.nom}</span>
+                    <strong>{p.nom}</strong>
+                    <span className="muted">{p.marque?.nom || p.categorie?.nom}</span>
+                    <span className="sc-price">{formatMoney(p.prix_par_jour, p.devise?.symbole || "DH")}{t("store.per")}{p.unite?.symbole || "j"}</span>
+                  </div>
+                  <button className={qIn ? "btn-ghost" : "btn-primary"} onClick={() => addToCart(p)}>
+                    {qIn ? <><Check size={15} /> {t("store.in_cart")} ({qIn})</> : <><Plus size={15} /> {t("store.add")}</>}
+                  </button>
                 </div>
-                <div className="sc-body">
-                  <span className="sc-shop"><Store size={11} /> {p.proprietaire?.nom}</span>
-                  <strong>{p.nom}</strong>
-                  <span className="muted">{p.marque?.nom || p.categorie?.nom}</span>
-                  <span className="sc-price">{formatMoney(p.prix_par_jour, p.devise?.symbole || "DH")}{t("store.per")}{p.unite?.symbole || "j"}</span>
-                </div>
-                <button className="btn-primary" onClick={() => openRequest(p)}><CalendarPlus size={15} /> {t("store.rent")}</button>
-              </div>
-            ))}
+              );
+            })}
           </div>
           {page < lastPage && (
             <div style={{ textAlign: "center", marginTop: 22 }}>
@@ -151,33 +195,65 @@ export default function ClientStore() {
         </>
       )}
 
-      {sel && (
-        <Modal title={`${t("store.request_title")} — ${sel.nom}`} onClose={() => setSel(null)}>
-          <form className="form" onSubmit={submit}>
-            {error && <div className="alert">{error}</div>}
-            <p className="muted" style={{ marginTop: 0 }}><Store size={12} /> {sel.proprietaire?.nom}</p>
-            <div className="form-row">
-              <div>
-                <label>{t("store.start")}</label>
-                <input type="datetime-local" value={form.start} min={minDt}
-                  onChange={(e) => setForm({ ...form, start: e.target.value })} required />
+      {/* Panier */}
+      {cartOpen && (
+        <Modal title={t("store.cart")} onClose={() => setCartOpen(false)} wide>
+          {cart.length === 0 ? (
+            <p className="muted" style={{ padding: "20px 0" }}>{t("store.cart_empty")}</p>
+          ) : (
+            <form className="form" onSubmit={checkout}>
+              {error && <div className="alert">{error}</div>}
+              {cartBoutique && <p className="muted" style={{ marginTop: 0 }}><Store size={12} /> {cartBoutique.nom}</p>}
+
+              <div className="cart-lines">
+                {cart.map((c) => (
+                  <div className="cart-line" key={c.product.id}>
+                    <div className="cl-thumb">
+                      {c.product.url_image ? <img src={assetUrl(c.product.url_image)} alt="" /> : <ImageIcon size={18} />}
+                    </div>
+                    <div className="cl-info">
+                      <strong>{c.product.nom}</strong>
+                      <span className="muted">{formatMoney(c.product.prix_par_jour, c.product.devise?.symbole || "DH")}{t("store.per")}{c.product.unite?.symbole || "j"}</span>
+                    </div>
+                    <div className="qty-stepper">
+                      <button type="button" onClick={() => setQty(c.product.id, c.quantity - 1)}><Minus size={13} /></button>
+                      <span>{c.quantity}</span>
+                      <button type="button" onClick={() => setQty(c.product.id, c.quantity + 1)}><Plus size={13} /></button>
+                    </div>
+                    <strong className="cl-total">{formatMoney(Number(c.product.prix_par_jour) * c.quantity * (days || 1))}</strong>
+                    <button type="button" className="icon-btn danger" onClick={() => removeFromCart(c.product.id)}><Trash2 size={15} /></button>
+                  </div>
+                ))}
               </div>
-              <div>
-                <label>{t("store.end")}</label>
-                <input type="datetime-local" value={form.end} min={form.start || minDt}
-                  onChange={(e) => setForm({ ...form, end: e.target.value })} required />
+
+              <label style={{ marginTop: 14 }}>{t("store.period")}</label>
+              <div className="form-row">
+                <div>
+                  <label>{t("store.start")}</label>
+                  <input type="datetime-local" value={period.start} min={minDt}
+                    onChange={(e) => setPeriod({ ...period, start: e.target.value })} required />
+                </div>
+                <div>
+                  <label>{t("store.end")}</label>
+                  <input type="datetime-local" value={period.end} min={period.start || minDt}
+                    onChange={(e) => setPeriod({ ...period, end: e.target.value })} required />
+                </div>
               </div>
-            </div>
-            <label>{t("store.qty")}</label>
-            <input type="number" min="1" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} required />
-            <div className="pay-summary" style={{ marginTop: 12 }}>
-              <div className="ttc"><span>{t("store.estimate")}</span><strong>{formatMoney(totalEstimate)}</strong></div>
-            </div>
-            <div className="form-actions">
-              <button type="button" className="btn-ghost" onClick={() => setSel(null)}>{t("common.cancel")}</button>
-              <button type="submit" className="btn-primary" disabled={saving || days <= 0}>{saving ? t("common.saving") : t("store.submit")}</button>
-            </div>
-          </form>
+
+              <div className="pay-summary" style={{ marginTop: 12 }}>
+                <div><span>{t("sales.ht")}</span><strong>{formatMoney(subtotal)}</strong></div>
+                <div><span>TVA ({TAX}%)</span><strong>{formatMoney(ttc - subtotal)}</strong></div>
+                <div className="ttc"><span>{t("store.estimate")}</span><strong>{formatMoney(ttc)}</strong></div>
+              </div>
+
+              <div className="form-actions">
+                <button type="button" className="btn-ghost" onClick={() => setCartOpen(false)}>{t("common.cancel")}</button>
+                <button type="submit" className="btn-primary" disabled={saving || days <= 0}>
+                  <ShoppingCart size={15} /> {saving ? t("common.saving") : t("store.checkout")}
+                </button>
+              </div>
+            </form>
+          )}
         </Modal>
       )}
     </div>

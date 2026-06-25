@@ -176,6 +176,9 @@ const resources = {
         search_ph: "Rechercher un produit, une marque…", all_shops: "Toutes les boutiques",
         shop: "Boutique", results: "produits", load_more: "Voir plus", no_results: "Aucun résultat",
         marketplace: "Catalogue", filters: "Filtres",
+        add: "Ajouter", in_cart: "Au panier", cart: "Mon panier", cart_empty: "Votre panier est vide.",
+        cart_other_shop: "Votre panier contient des articles d'une autre boutique. Le vider et recommencer ?",
+        checkout: "Confirmer la location", period: "Période de location", added: "Ajouté au panier",
       },
       reg_client: {
         title: "Créer un compte client", subtitle: "pour louer chez {{shop}}",
@@ -477,6 +480,9 @@ const resources = {
         search_ph: "ابحث عن منتج أو علامة…", all_shops: "كل المتاجر",
         shop: "المتجر", results: "منتجات", load_more: "عرض المزيد", no_results: "لا توجد نتائج",
         marketplace: "الكتالوج", filters: "تصفية",
+        add: "إضافة", in_cart: "في السلة", cart: "سلتي", cart_empty: "سلتك فارغة.",
+        cart_other_shop: "تحتوي سلتك على عناصر من متجر آخر. هل تريد إفراغها والبدء من جديد؟",
+        checkout: "تأكيد الكراء", period: "فترة الكراء", added: "أُضيف إلى السلة",
       },
       reg_client: {
         title: "إنشاء حساب عميل", subtitle: "للكراء لدى {{shop}}",
