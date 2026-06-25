@@ -182,6 +182,7 @@ const resources = {
         name: "Nom complet", email: "Email", phone: "Téléphone", password: "Mot de passe",
         password_confirm: "Confirmer le mot de passe", submit: "Créer mon compte",
         have: "Déjà un compte ?", login: "Se connecter",
+        choose_shop: "Boutique", choose_shop_ph: "— Choisissez une boutique —",
       },
       employees: {
         title: "Gestion des employés", new: "Nouvel employé", edit: "Modifier l'employé",
@@ -483,6 +484,7 @@ const resources = {
         name: "الاسم الكامل", email: "البريد الإلكتروني", phone: "الهاتف", password: "كلمة المرور",
         password_confirm: "تأكيد كلمة المرور", submit: "إنشاء حسابي",
         have: "لديك حساب؟", login: "تسجيل الدخول",
+        choose_shop: "المتجر", choose_shop_ph: "— اختر متجرًا —",
       },
       employees: {
         title: "إدارة الموظفين", new: "موظف جديد", edit: "تعديل الموظف",
