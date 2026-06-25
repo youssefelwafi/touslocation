@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Concerns;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 /**
  * Isolation multi-tenant : chaque manager ne voit/modifie que ses données
@@ -35,6 +36,14 @@ trait TenantScoped
         $u = $request->user();
         abort_unless($u->isStaff(), 403);
         abort_unless($u->hasModule($key), 403, 'Module non autorisé pour cet utilisateur.');
+    }
+
+    // Le super-admin voit les données de TOUS les tenants : pour les référentiels
+    // partagés (devises, taxes, unités, types de paiement, catégories, marques),
+    // on dédoublonne par une clé naturelle afin de ne pas afficher N copies identiques.
+    protected function dedupeForSuperAdmin(Request $request, Collection $rows, string $key = 'nom'): Collection
+    {
+        return $request->user()->isSuperAdmin() ? $rows->unique($key)->values() : $rows;
     }
 
     // Vérifie qu'un modèle appartient bien au tenant courant (404 sinon).

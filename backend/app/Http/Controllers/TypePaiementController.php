@@ -20,7 +20,7 @@ class TypePaiementController extends Controller
             $query->where('actif', true);
         }
 
-        return response()->json($query->get());
+        return response()->json($this->dedupeForSuperAdmin($request, $query->get(), 'nom'));
     }
 
     public function store(Request $request): JsonResponse

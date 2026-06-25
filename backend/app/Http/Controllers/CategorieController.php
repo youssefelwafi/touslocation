@@ -14,8 +14,9 @@ class CategorieController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Categorie::withCount('materiels')->orderBy('nom');
+        $rows = $this->scopeToTenant($query, $request)->get();
 
-        return response()->json($this->scopeToTenant($query, $request)->get());
+        return response()->json($this->dedupeForSuperAdmin($request, $rows, 'nom'));
     }
 
     public function store(Request $request): JsonResponse
