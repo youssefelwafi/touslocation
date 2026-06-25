@@ -18,11 +18,17 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'unique:utilisateurs,email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'telephone' => ['nullable', 'string', 'max:30'],
-            'manager_id' => ['required', 'exists:utilisateurs,id'],
+            // Boutique facultative : un client peut commander dans n'importe quelle
+            // boutique (place de marché). Le rattachement n'est pas requis.
+            'manager_id' => ['nullable', 'exists:utilisateurs,id'],
         ]);
 
-        $manager = Utilisateur::find($data['manager_id']);
-        abort_unless($manager && $manager->role === 'manager', 422, 'Boutique invalide.');
+        $proprietaireId = null;
+        if (! empty($data['manager_id'])) {
+            $manager = Utilisateur::find($data['manager_id']);
+            abort_unless($manager && $manager->role === 'manager', 422, 'Boutique invalide.');
+            $proprietaireId = $manager->id;
+        }
 
         $user = Utilisateur::create([
             'nom' => $data['nom'],
@@ -30,7 +36,7 @@ class AuthController extends Controller
             'password' => $data['password'],
             'telephone' => $data['telephone'] ?? null,
             'role' => 'client',
-            'proprietaire_id' => $manager->id,
+            'proprietaire_id' => $proprietaireId,
             'statut' => 'active',
         ]);
 

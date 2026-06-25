@@ -10,20 +10,15 @@ export default function RegisterClient() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const shopId = params.get("shop");
+  const shopId = params.get("shop"); // boutique éventuelle (si arrivée depuis une boutique)
   const [shopName, setShopName] = useState("");
-  const [shops, setShops] = useState([]);        // liste pour le sélecteur (si pas de boutique en paramètre)
-  const [pickedShop, setPickedShop] = useState("");
   const [form, setForm] = useState({ nom: "", email: "", telephone: "", password: "", password_confirmation: "" });
   const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const managerId = shopId || pickedShop;
-
   useEffect(() => {
     if (shopId) api.get(`/boutiques/${shopId}`).then((r) => setShopName(r.data.shop.name)).catch(() => {});
-    else api.get("/boutiques").then((r) => setShops(r.data)).catch(() => setShops([]));
   }, [shopId]);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
@@ -32,7 +27,8 @@ export default function RegisterClient() {
     e.preventDefault();
     setError(""); setErrors({}); setLoading(true);
     try {
-      await registerClient({ ...form, manager_id: managerId });
+      // Rattachement boutique facultatif : le client commande dans n'importe quelle boutique.
+      await registerClient({ ...form, manager_id: shopId || null });
       navigate("/magasin");
     } catch (err) {
       if (err.response?.status === 422) setErrors(err.response.data.errors || {});
@@ -49,16 +45,6 @@ export default function RegisterClient() {
         <p className="subtitle">{shopName ? t("reg_client.subtitle", { shop: shopName }) : t("reg_client.title")}</p>
         {error && <div className="alert">{error}</div>}
 
-        {!shopId && (
-          <>
-            <label>{t("reg_client.choose_shop")}</label>
-            <select value={pickedShop} onChange={(e) => setPickedShop(e.target.value)} required>
-              <option value="">{t("reg_client.choose_shop_ph")}</option>
-              {shops.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
-          </>
-        )}
-
         <label>{t("reg_client.name")}</label>
         <input value={form.nom} onChange={set("nom")} required />
         {errors.nom && <small className="err">{errors.nom[0]}</small>}
@@ -73,7 +59,7 @@ export default function RegisterClient() {
         <label>{t("reg_client.password_confirm")}</label>
         <input type="password" value={form.password_confirmation} onChange={set("password_confirmation")} required />
 
-        <button disabled={loading || !managerId} type="submit">{loading ? t("register.submitting") : t("reg_client.submit")}</button>
+        <button disabled={loading} type="submit">{loading ? t("register.submitting") : t("reg_client.submit")}</button>
         <small className="hint">{t("reg_client.have")} <Link to="/connexion">{t("reg_client.login")}</Link></small>
       </form>
       </div>
