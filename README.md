@@ -1,8 +1,9 @@
-# LocaPro — Système de Gestion de Location de Matériel
+# TousLocation — Système de Gestion de Location de Matériel
 
 > Application web moderne pour la gestion complète de la location de matériel
 > (informatique, chantier, événementiel, audiovisuel, etc.).
 > Stack : **Laravel** (API REST) + **React.js** (interface) + **MySQL**.
+> Bilingue **français / arabe (RTL)**, multi-entreprises. Nomenclature 100 % française.
 
 ---
 
@@ -40,6 +41,18 @@ La documentation complète se trouve dans le dossier [`docs/`](docs/) :
 
 ## 🚀 Démarrage rapide
 
+### Windows — en un clic
+
+Double-cliquez sur **`deploy-windows.bat`**. Le script installe les dépendances,
+configure la base, charge les données de démo (avec images du matériel) et lance
+l'application sur <http://localhost:5173>.
+Détails et options : [DEPLOIEMENT-WINDOWS.md](DEPLOIEMENT-WINDOWS.md).
+
+Comptes de démo (mot de passe `1234567890`) : `admin@touslocations.com`,
+`manager@touslocations.com`, `employe@touslocations.com`, `client@touslocations.com`.
+
+### Manuel (Linux / macOS / Windows)
+
 ```bash
 # Backend (Laravel)
 cd backend
@@ -55,7 +68,7 @@ npm install
 npm run dev
 ```
 
-Voir [docs/08-installation.md](docs/08-installation.md) pour le détail.
+Déploiement VPS Linux (nginx) : dossier [`deploy/`](deploy/).
 
 ---
 

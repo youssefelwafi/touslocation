@@ -279,6 +279,7 @@ class DatabaseSeeder extends Seeder
             'Chantier' => ['#ff3b30', '#ff9f0a'],
         ];
         [$c1, $c2] = $palette[$category] ?? ['#6e6e73', '#aeaeb2'];
+        $icon = $this->toolIcon($name);
         $label = htmlspecialchars($name, ENT_QUOTES);
         // découpe le nom sur ~2 lignes
         $words = explode(' ', $label);
@@ -294,11 +295,14 @@ class DatabaseSeeder extends Seeder
     </linearGradient>
   </defs>
   <rect width="480" height="360" fill="url(#g)"/>
-  <circle cx="400" cy="70" r="120" fill="rgba(255,255,255,0.10)"/>
-  <circle cx="70" cy="320" r="90" fill="rgba(255,255,255,0.08)"/>
-  <text x="40" y="300" font-family="Arial, sans-serif" font-size="13" fill="rgba(255,255,255,0.85)">{$category}</text>
-  <text x="40" y="180" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#fff">{$line1}</text>
-  <text x="40" y="218" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="#fff">{$line2}</text>
+  <circle cx="410" cy="60" r="130" fill="rgba(255,255,255,0.10)"/>
+  <circle cx="60" cy="320" r="80" fill="rgba(255,255,255,0.08)"/>
+  <text x="40" y="44" font-family="Arial, sans-serif" font-size="14" letter-spacing="1" fill="rgba(255,255,255,0.85)">{$category}</text>
+  <g transform="translate(174,70) scale(5.5)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    {$icon}
+  </g>
+  <text x="40" y="318" font-family="Arial, sans-serif" font-weight="bold" font-size="26" fill="#fff">{$line1}</text>
+  <text x="40" y="348" font-family="Arial, sans-serif" font-weight="bold" font-size="26" fill="#fff">{$line2}</text>
 </svg>
 SVG;
 
@@ -306,5 +310,42 @@ SVG;
         Storage::disk('public')->put($path, $svg);
 
         return $path;
+    }
+
+    // Icône vectorielle (style ligne, repère 24x24) correspondant au type de matériel.
+    private function toolIcon(string $name): string
+    {
+        $n = Str::lower(Str::ascii($name));
+
+        return match (true) {
+            str_contains($n, 'ordinateur') || str_contains($n, 'portable') || str_contains($n, 'laptop')
+                => '<rect x="3" y="5" width="18" height="11" rx="1.5"/><path d="M1.5 20h21l-2.2-3.5H3.7z"/>',
+            str_contains($n, 'ecran') || str_contains($n, 'moniteur')
+                => '<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/>',
+            str_contains($n, 'imprimante')
+                => '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1.5"/><rect x="7" y="13" width="10" height="7" rx="1"/><path d="M16.8 12.5h.01"/>',
+            str_contains($n, 'projecteur')
+                => '<rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="9" cy="12" r="3.3"/><path d="M16 10h2M16 14h2M6 17v2M18 17v2"/>',
+            str_contains($n, 'sonorisation') || str_contains($n, 'enceinte') || str_contains($n, 'haut-parleur')
+                => '<rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="15" r="4"/><circle cx="12" cy="6.5" r="1.7"/>',
+            str_contains($n, 'micro')
+                => '<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/>',
+            str_contains($n, 'tente')
+                => '<path d="M12 4 2.5 20h19z"/><path d="M12 4v16M12 9l5 11M12 9 7 20"/>',
+            str_contains($n, 'table')
+                => '<path d="M3 7h18M5 7l-1 13M19 7l1 13M3 12h18"/>',
+            str_contains($n, 'chaise')
+                => '<path d="M8 3v9h8M8 12l-1 9M16 3v18M8 12h8M16 16h4"/>',
+            str_contains($n, 'perforateur') || str_contains($n, 'perceuse') || str_contains($n, 'visseuse')
+                => '<path d="M3 8h10v6H3z"/><path d="M13 9.5h4v3h-4zM17 11h4M6 14v3h4v-3M5 8V5h5v3"/>',
+            str_contains($n, 'echafaudage') || str_contains($n, 'echelle')
+                => '<path d="M6 2v20M18 2v20M6 7h12M6 12h12M6 17h12"/>',
+            str_contains($n, 'electrogene') || str_contains($n, 'groupe') || str_contains($n, 'generateur')
+                => '<rect x="3" y="8" width="18" height="10" rx="2"/><path d="M7 8V6h10v2M21 12h1M2 12h1M12 10.5l-2 3h4l-2 3"/>',
+            str_contains($n, 'podium') || str_contains($n, 'scene') || str_contains($n, 'modulaire')
+                => '<path d="M3 9l9-5 9 5-9 5z"/><path d="M3 9v6l9 5 9-5V9M12 14v6"/>',
+            default
+                => '<path d="M15 6a4 4 0 0 0-5.3 5.3L4 17l3 3 5.7-5.7A4 4 0 0 0 18 9l-2.8 2.8-2-2L16 6.8z"/>',
+        };
     }
 }
