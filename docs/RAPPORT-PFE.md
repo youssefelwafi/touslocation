@@ -595,8 +595,7 @@ répondant concrètement aux besoins des entreprises de location de matériel.
 
 ## Annexes
 
-- **Annexe A** — Schéma complet de la base de données (Figure 3 ; fichier interactif
-  `database-schema.html`, exportable en PNG).
+- **Annexe A** — Schéma complet de la base de données (Figure 3).
 - **Annexe B** — Diagramme de cas d'utilisation (Figure 1), architecture MVC (Figure 2) et
   diagramme de classes UML (Figure 4).
 - **Annexe C** — Arborescence des vues (Figure 5) et diagramme de séquence (Figure 6).
