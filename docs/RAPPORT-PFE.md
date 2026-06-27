@@ -79,9 +79,12 @@ Je remercie tout particulièrement mon encadrant, **M. Othmane DAIF**, pour son
 encadrement, sa disponibilité et ses précieux conseils tout au long de ce travail.
 
 Mes remerciements s'adressent également à l'ensemble du **corps formateur et
-administratif de l'OFPPT – ISTA ISAG de Casablanca**, pour la qualité de la formation reçue.
+administratif de l'OFPPT – ISTA ISAG de Casablanca**, pour la qualité de la formation
+reçue et pour l'environnement d'apprentissage stimulant qui m'a été offert durant ma
+formation.
 
-Enfin, je remercie ma **famille** et mes **amis** pour leur soutien moral indéfectible.
+Enfin, je remercie ma **famille** et mes **amis** pour leur soutien moral indéfectible,
+ainsi que toutes les personnes qui, de près ou de loin, ont rendu ce travail possible.
 
 <div class="page-break"></div>
 
@@ -89,13 +92,14 @@ Enfin, je remercie ma **famille** et mes **amis** pour leur soutien moral indéf
 
 Ce projet de fin d'études porte sur la **conception et la réalisation de TousLocation**,
 une application web de **gestion de location de matériel** destinée aux entreprises
-marocaines. L'objectif est de remplacer les méthodes manuelles (papier, Excel) par une
-solution centralisée, fiable et complète.
+marocaines. L'objectif est de remplacer les méthodes manuelles (papier, fichiers Excel)
+par une solution centralisée, fiable et complète couvrant l'ensemble du cycle
+d'exploitation.
 
 L'application repose sur une architecture découplée : une **API REST Laravel** (PHP), une
 interface **React** (Single Page Application) et une base de données **MySQL/MariaDB**.
-Elle couvre tout le cycle d'exploitation : catalogue et stock, locations (disponibilité,
-TVA, paiements partiels, facture PDF), achats, ventes, dépenses, ajustements de stock et
+Elle couvre tout le cycle métier : catalogue et stock, locations (disponibilité, TVA,
+paiements partiels, facture PDF), achats, ventes, dépenses, ajustements de stock et
 **reporting financier**. Le système est **multi-boutiques (SaaS)** avec isolation des
 données par boutique : il expose une **place de marché client** (catalogue
 multi-boutiques avec recherche, filtre et panier multi-articles) et reste **sécurisé**,
@@ -108,13 +112,13 @@ multi-tenant, gestion de stock, développement web.
 
 This end-of-studies project deals with the **design and development of TousLocation**, an
 **equipment-rental management** web application for Moroccan businesses. It replaces
-manual methods with a centralized, reliable and complete solution. Built on a **Laravel
-REST API**, a **React** SPA and a **MySQL/MariaDB** database, it covers the whole
-operational cycle: catalogue and stock, rentals (availability, VAT, partial payments, PDF
-invoice), purchasing, sales, expenses, stock adjustments and **financial reporting**. It is
-a **multi-shop (SaaS) marketplace** where clients browse a multi-shop catalogue (search,
-filter and multi-item cart), while remaining **secure**, **responsive** and **bilingual
-(French/Arabic, RTL)**.
+manual methods with a centralized, reliable and complete solution covering the whole
+operational cycle. Built on a **Laravel REST API**, a **React** SPA and a
+**MySQL/MariaDB** database, it covers catalogue and stock, rentals (availability, VAT,
+partial payments, PDF invoice), purchasing, sales, expenses, stock adjustments and
+**financial reporting**. It is a **multi-shop (SaaS) marketplace** where clients browse a
+multi-shop catalogue (search, filter and multi-item cart), while remaining **secure**,
+**responsive** and **bilingual (French/Arabic, RTL)**.
 
 **Keywords:** equipment rental, Laravel, React, REST API, database, multi-tenant, stock
 management, web development.
@@ -124,466 +128,752 @@ management, web development.
 ## Table des matières
 
 - **Introduction générale**
-- **Chapitre 1 — Contexte général du projet**
-  - 1.1 Présentation du projet
-  - 1.2 Problématique
-  - 1.3 Étude de l'existant
-  - 1.4 Objectifs du projet
-  - 1.5 Solution proposée
-  - 1.6 Méthodologie de conduite du projet
-- **Chapitre 2 — Analyse et conception**
-  - 2.1 Spécification des besoins
-  - 2.2 Acteurs du système
-  - 2.3 Diagramme de cas d'utilisation
-  - 2.4 Architecture de l'application (MVC)
-  - 2.5 Conception de la base de données
-  - 2.6 Diagramme de classes (UML)
-- **Chapitre 3 — Réalisation**
-  - 3.1 Environnement et outils de développement
-  - 3.2 Technologies utilisées
-  - 3.3 Structure des vues : étapes et fonctionnalités
-  - 3.4 Sécurité et isolation multi-tenant
-  - 3.5 Tests et déploiement
-  - 3.6 Difficultés rencontrées et solutions
-- **Conclusion générale et perspectives**
-- **Références**
+- **Chapitre 1 — Cadrage du projet**
+  - 1.1 Contexte et problématique
+  - 1.2 Objectifs du projet
+  - 1.3 Besoins fonctionnels et non fonctionnels
+  - 1.4 Méthodologie adoptée (Agile / SCRUM)
+  - 1.5 Planification (Backlog produit et diagramme de Gantt)
+- **Chapitre 2 — Étude préliminaire et technologies**
+  - 2.1 Étude des solutions existantes et similaires
+  - 2.2 Présentation des technologies et frameworks retenus
+    - 2.2.1 Frontend (React + Vite)
+    - 2.2.2 Backend (Laravel)
+    - 2.2.3 Base de données (MySQL/MariaDB)
+  - 2.3 Outils de développement et de collaboration
+- **Chapitre 3 — Analyse et conception**
+  - 3.1 Identification des acteurs et leurs rôles
+  - 3.2 Diagrammes de cas d'utilisation
+  - 3.3 Diagrammes de séquence
+  - 3.4 Diagramme de classes
+  - 3.5 Modèle physique de données
+- **Chapitre 4 — Réalisation et implémentation**
+  - 4.1 Mise en place de l'environnement de développement
+  - 4.2 Architecture générale de l'application
+  - 4.3 Implémentation du backend
+  - 4.4 Implémentation du frontend web
+  - 4.5 Tests et validation
+  - 4.6 Difficultés rencontrées et solutions apportées
+- **Conclusion et perspectives**
+- **Références bibliographiques et webographiques**
 - **Annexes**
 
 ### Liste des figures
 
 | N° | Figure |
 | -- | ------ |
-| Figure 1 | Diagramme de cas d'utilisation |
-| Figure 2 | Architecture technique (MVC) |
-| Figure 3 | Schéma de la base de données (modèle E-A) |
+| Figure 1 | Diagramme de Gantt — planification des sprints |
+| Figure 2 | Diagramme de cas d'utilisation |
+| Figure 3 | Diagramme de séquence — création d'une location |
 | Figure 4 | Diagramme de classes (UML) |
-| Figure 5 | Arborescence des vues de l'interface |
-| Figure 6 | Diagramme de séquence — création d'une location |
+| Figure 5 | Modèle physique de données |
+| Figure 6 | Architecture technique (MVC) de l'application |
+| Figure 7 | Page d'accueil (espace public) |
+| Figure 8 | Page de connexion |
+| Figure 9 | Vitrine des boutiques publiques |
+| Figure 10 | Tableau de bord (espace staff) |
+| Figure 11 | Catalogue du matériel |
+| Figure 12 | Gestion des locations |
+| Figure 13 | Gestion des achats |
+| Figure 14 | Gestion des ventes |
+| Figure 15 | Rapports et statistiques |
+| Figure 16 | Paramètres et référentiels |
+| Figure 17 | Place de marché client (panier) |
+| Figure 18 | Mes locations (espace client) |
 
 ### Liste des tableaux
 
 | N° | Tableau |
 | -- | ------- |
-| Tableau 1 | Besoins fonctionnels |
-| Tableau 2 | Outils et technologies utilisés |
-| Tableau 3 | Comptes de démonstration |
+| Tableau 1 | Backlog produit (user stories par sprint) |
+| Tableau 2 | Comparatif des solutions existantes |
+| Tableau 3 | Outils de développement et de collaboration |
+| Tableau 4 | Acteurs, rôles et droits |
+| Tableau 5 | Difficultés rencontrées et solutions apportées |
+| Tableau 6 | Comptes de démonstration |
 
 <div class="page-break"></div>
 
 ## Introduction générale
 
 La transformation digitale s'impose aujourd'hui comme un facteur clé de compétitivité
-pour les entreprises. De nombreuses activités, encore gérées manuellement, gagneraient à
-être informatisées afin d'améliorer la fiabilité, la traçabilité et la productivité. Le
-secteur de la **location de matériel** (informatique, audiovisuel, événementiel,
-chantier) illustre parfaitement ce besoin : suivi difficile des disponibilités, risques
-de double réservation, lenteur de facturation et absence de vision financière globale.
+pour les entreprises, quelle que soit leur taille. De nombreuses activités, encore gérées
+manuellement, gagneraient à être informatisées afin d'améliorer la fiabilité, la
+traçabilité et la productivité. Le secteur de la **location de matériel** (informatique,
+audiovisuel, événementiel, matériel de chantier) illustre parfaitement ce besoin : suivi
+difficile des disponibilités, risques de double réservation, lenteur de la facturation et
+absence de vision financière globale freinent la croissance des petites et moyennes
+structures.
+
+Dans le contexte marocain, ce besoin est d'autant plus marqué que les solutions
+logicielles disponibles sont souvent coûteuses, généralistes et peu adaptées aux
+spécificités locales : monnaie en Dirham, taux de TVA marocains, bilinguisme
+français/arabe. Beaucoup d'entreprises continuent ainsi de s'appuyer sur le papier ou sur
+des fichiers Excel, avec tous les risques d'erreur et de perte d'information que cela
+comporte.
 
 C'est dans ce cadre que s'inscrit ce **projet de fin d'études** : la conception et la
 réalisation de **TousLocation**, une application web complète de gestion de location de
-matériel.
+matériel. La problématique centrale consiste à **centraliser et fiabiliser** l'ensemble
+des opérations d'une entreprise de location — du catalogue au reporting financier — au
+sein d'une plateforme unique, sécurisée, accessible et capable de servir **plusieurs
+boutiques** (architecture multi-tenant de type SaaS), tout en proposant une **place de
+marché** aux clients finaux.
 
-Ce rapport s'articule autour de **trois chapitres** : le premier présente le **contexte
-général** du projet (problématique, objectifs, solution) ; le deuxième traite de
-l'**analyse et de la conception** (besoins, cas d'utilisation, architecture, base de
-données) ; le troisième décrit la **réalisation** (outils, technologies, structure des
-vues, sécurité, tests et déploiement). Une conclusion générale dresse le bilan et les
-perspectives.
+Pour répondre à cette problématique, ce rapport s'organise en **quatre chapitres** :
+
+- le **Chapitre 1 — Cadrage du projet** présente le contexte, la problématique, les
+  objectifs, les besoins fonctionnels et non fonctionnels, la méthodologie agile retenue
+  et la planification du travail ;
+- le **Chapitre 2 — Étude préliminaire et technologies** analyse les solutions
+  existantes et justifie les choix techniques (frontend, backend, base de données,
+  outillage) ;
+- le **Chapitre 3 — Analyse et conception** détaille les acteurs, les cas d'utilisation,
+  les diagrammes de séquence et de classes, ainsi que le modèle physique de données ;
+- le **Chapitre 4 — Réalisation et implémentation** décrit la mise en œuvre concrète de
+  l'application, illustrée par des captures d'écran réelles, puis les tests et les
+  difficultés rencontrées.
+
+Une **conclusion générale** dresse enfin le bilan du projet, ses limites et ses
+perspectives d'évolution.
 
 <div class="page-break"></div>
 
-## Chapitre 1 — Contexte général du projet
+## Chapitre 1 — Cadrage du projet
 
 ### Introduction du chapitre
 
-Ce chapitre situe le projet dans son contexte : il en présente la problématique,
-analyse l'existant, fixe les objectifs et expose la solution retenue ainsi que la
-méthodologie suivie.
+Ce premier chapitre pose les fondations du projet. Il en présente le contexte et la
+problématique, fixe les objectifs visés, détaille les besoins fonctionnels et non
+fonctionnels, explique la méthodologie agile adoptée et expose la planification du
+travail à travers un backlog produit et un diagramme de Gantt.
 
-### 1.1 Présentation du projet
+### 1.1 Contexte et problématique
 
-**TousLocation** est une application web destinée aux entreprises de location de
-matériel. Elle vise à centraliser et automatiser l'ensemble des opérations : gestion du
-matériel et du stock, locations, facturation, achats, ventes, dépenses et suivi
-financier, le tout au sein d'une interface moderne et accessible.
+Le marché de la location de matériel regroupe une multitude d'acteurs : loueurs de
+matériel informatique et audiovisuel, prestataires événementiels, sociétés de
+construction louant du matériel de chantier. Pour la plupart de ces entreprises, la
+gestion quotidienne repose encore sur des outils non spécialisés (cahiers, tableurs), ce
+qui engendre plusieurs limites :
 
-### 1.2 Problématique
-
-La gestion traditionnelle de la location de matériel présente plusieurs limites :
-
-- difficulté de suivi des locations en cours et de la **disponibilité réelle** ;
-- risque élevé d'**erreurs** et de **double réservation** ;
+- difficulté de suivi des locations en cours et de la **disponibilité réelle** du
+  matériel sur une période donnée ;
+- risque élevé d'**erreurs de saisie** et de **double réservation** d'un même article ;
 - **lenteur** dans l'établissement des contrats et des factures ;
-- absence de **vision financière consolidée** (revenus, coûts, bénéfice) ;
-- **faible sécurité** et aucune séparation des données entre entités.
+- absence de **vision financière consolidée** (revenus, coûts, bénéfice, encaissements) ;
+- **faible sécurité** des données et aucune séparation entre entités ou boutiques.
 
-### 1.3 Étude de l'existant
+La **problématique** peut donc se formuler ainsi : *comment concevoir une application web
+unique, fiable et sécurisée, qui automatise l'intégralité du cycle d'exploitation d'une
+entreprise de location de matériel, tout en restant adaptée au contexte marocain et
+capable de servir plusieurs boutiques indépendantes ?*
 
-Les solutions actuellement utilisées par de nombreuses petites structures reposent sur
-le **papier** ou des **fichiers Excel**. Ces approches sont peu fiables (erreurs de
-saisie), non collaboratives, sans contrôle automatique de disponibilité ni reporting.
-Les logiciels du marché, quant à eux, sont souvent **coûteux**, **généralistes** et peu
-adaptés au contexte marocain (Dirham, TVA, bilinguisme). Ce constat justifie le
-développement d'une solution **sur mesure**, simple et complète.
+### 1.2 Objectifs du projet
 
-### 1.4 Objectifs du projet
+Le projet vise les objectifs suivants :
 
-- Gérer le **catalogue de matériel** (images, disponibilité, calendrier).
-- Gérer le **cycle de location** (réservation, paiements partiels, retour, facture PDF).
-- Gérer l'**approvisionnement** (achats), les **ventes**, les **dépenses** et les
-  **ajustements de stock**.
-- Fournir des **rapports** (bénéfice, locations).
-- Garantir l'**isolation des données** entre entreprises (multi-tenant).
-- Offrir une interface **moderne, responsive et bilingue** (français / arabe).
+- **Centraliser le catalogue de matériel** (images, prix, disponibilité, calendrier) et
+  la gestion du stock.
+- **Couvrir le cycle complet de location** : réservation multi-articles, contrôle de
+  disponibilité, calcul de la TVA, paiements partiels, retour et facture PDF.
+- **Gérer l'approvisionnement** (achats auprès des fournisseurs), les **ventes**, les
+  **dépenses** et les **ajustements de stock**.
+- **Fournir des rapports financiers** (bénéfice, locations, encaissements) sur une
+  période.
+- **Garantir l'isolation des données** entre boutiques (architecture multi-tenant SaaS).
+- **Offrir une place de marché client** multi-boutiques avec recherche, filtre et panier.
+- **Proposer une interface moderne, responsive et bilingue** (français / arabe, RTL).
 
-### 1.5 Solution proposée
+### 1.3 Besoins fonctionnels et non fonctionnels
 
-La solution proposée est une **application web** à architecture **découplée** :
+#### Besoins fonctionnels
 
-- un **back-end** Laravel exposant une **API REST** sécurisée ;
-- un **front-end** React (Single Page Application) consommant l'API ;
-- une base de données **MySQL/MariaDB**.
+Le système doit permettre de :
 
-Cette architecture assure une bonne séparation des responsabilités, une maintenance
-facilitée et une évolutivité (ajout de modules, application mobile future).
+- authentifier les utilisateurs et gérer les **rôles** (super-admin, gérant, employé,
+  client) ;
+- administrer **plusieurs boutiques** isolées les unes des autres ;
+- gérer le **catalogue de matériel** (CRUD, images, catégories, marques, unités) et le
+  suivi de **disponibilité** ;
+- créer et suivre des **locations** (multi-articles, TVA, paiements partiels, statuts,
+  facture PDF) ;
+- gérer les **achats** (fournisseurs, réception alimentant le stock, encaissements) ;
+- gérer les **ventes** (décrément du stock, encaissements, reçu PDF) ;
+- enregistrer les **dépenses** et les **ajustements de stock** valorisés ;
+- produire des **rapports** (bénéfice, locations par période) ;
+- exposer une **place de marché client** (catalogue multi-boutiques, recherche, filtre,
+  panier multi-articles) et le suivi « Mes locations » ;
+- administrer les **comptes** (création des gérants par le super-admin, libre-inscription
+  des clients).
 
-### 1.6 Méthodologie de conduite du projet
+#### Besoins non fonctionnels
 
-Le projet a été mené selon une **démarche itérative et incrémentale** : analyse du
-besoin, conception, développement par modules, tests, puis déploiement. Chaque module a
-été développé et validé avant de passer au suivant, ce qui a permis de livrer une
-application stable et cohérente.
+- **Sécurité** : authentification par jeton (Sanctum), hachage des mots de passe,
+  autorisation par rôle et par module, isolation stricte des données par boutique.
+- **Performance** : temps de réponse de l'API maîtrisé sur les écrans courants,
+  pagination et indexation des requêtes.
+- **Ergonomie** : interface claire, cohérente et intuitive, retours utilisateur
+  (notifications, validation des formulaires).
+- **Bilinguisme** : prise en charge complète du **français et de l'arabe**, avec gestion
+  du sens d'écriture **RTL**.
+- **Responsive** : adaptation aux différentes tailles d'écran (ordinateur, tablette,
+  mobile).
+- **Architecture multi-boutiques (SaaS)** : chaque boutique dispose d'un espace isolé,
+  initialisé automatiquement.
+- **Fiabilité et maintenabilité** : validation systématique côté serveur, intégrité du
+  stock, code structuré et API RESTful.
+
+### 1.4 Méthodologie adoptée (Agile / SCRUM)
+
+Le projet a été conduit selon une démarche **agile inspirée de SCRUM**, privilégiant des
+livraisons **itératives et incrémentales** plutôt qu'un cycle en cascade rigide. Cette
+approche permet de livrer rapidement des fonctionnalités utilisables, de recueillir un
+retour à chaque étape et d'absorber les changements de besoins.
+
+Les principes appliqués sont les suivants :
+
+- **Backlog produit** : l'ensemble des besoins est exprimé sous forme de *user stories*
+  hiérarchisées par priorité.
+- **Sprints** : le développement est découpé en itérations courtes et cohérentes
+  (un sprint regroupe un ensemble de stories formant un module fonctionnel livrable).
+- **Rôles SCRUM** : dans le cadre de ce PFE, l'étudiant assume le rôle de membre de
+  l'**équipe de développement**, l'encadrant jouant le rôle de **Product Owner** (priorisation,
+  validation des livrables) et de **SCRUM Master** (accompagnement méthodologique).
+- **Revue et rétrospective** : à la fin de chaque sprint, les fonctionnalités sont
+  démontrées et validées, puis les améliorations sont identifiées pour le sprint suivant.
+
+Cette organisation a permis de maintenir un rythme de travail soutenu et de livrer une
+application stable et cohérente, module après module.
+
+### 1.5 Planification (Backlog produit et diagramme de Gantt)
+
+Le **backlog produit** ci-dessous recense les principales *user stories* du projet,
+priorisées et réparties sur les sprints.
+
+**Tableau 1 — Backlog produit (user stories par sprint)**
+
+| ID | User story | Priorité | Sprint |
+| -- | ---------- | -------- | ------ |
+| US-01 | En tant que **super-admin**, je veux créer et gérer des comptes gérants afin d'administrer plusieurs boutiques. | Haute | Sprint 1 |
+| US-02 | En tant qu'**utilisateur**, je veux me connecter de façon sécurisée afin d'accéder à mon espace selon mon rôle. | Haute | Sprint 1 |
+| US-03 | En tant que **gérant**, je veux que chaque boutique soit isolée afin que mes données ne soient pas visibles par d'autres. | Haute | Sprint 1 |
+| US-04 | En tant que **gérant**, je veux gérer mon catalogue de matériel (CRUD, images, catégories) afin de présenter mes articles. | Haute | Sprint 2 |
+| US-05 | En tant que **gérant**, je veux suivre la disponibilité et le stock du matériel afin d'éviter les doubles réservations. | Haute | Sprint 2 |
+| US-06 | En tant qu'**employé**, je veux créer une location multi-articles avec calcul de la TVA afin d'établir une réservation correcte. | Haute | Sprint 3 |
+| US-07 | En tant qu'**employé**, je veux enregistrer des paiements partiels et générer une facture PDF afin de suivre les encaissements. | Haute | Sprint 3 |
+| US-08 | En tant que **gérant**, je veux gérer les achats auprès des fournisseurs afin d'alimenter mon stock à la réception. | Moyenne | Sprint 4 |
+| US-09 | En tant que **gérant**, je veux gérer les ventes avec décrément du stock et reçu PDF afin de tracer mes opérations. | Moyenne | Sprint 4 |
+| US-10 | En tant que **gérant**, je veux saisir les dépenses et les ajustements de stock afin de garder une comptabilité fiable. | Moyenne | Sprint 4 |
+| US-11 | En tant que **gérant**, je veux consulter des rapports de bénéfice et de locations afin de piloter mon activité. | Moyenne | Sprint 5 |
+| US-12 | En tant que **client**, je veux parcourir une place de marché multi-boutiques (recherche, filtre) afin de trouver du matériel. | Haute | Sprint 5 |
+| US-13 | En tant que **client**, je veux ajouter plusieurs articles d'une même boutique à un panier afin de commander en une seule location. | Haute | Sprint 5 |
+| US-14 | En tant qu'**utilisateur**, je veux une interface bilingue (FR/AR) et responsive afin d'utiliser l'application confortablement. | Moyenne | Sprint 6 |
+
+Le **diagramme de Gantt** ci-dessous représente l'ordonnancement de ces sprints dans le
+temps, depuis le cadrage et l'analyse jusqu'aux tests et à la finalisation.
+
+![Diagramme de Gantt](images/gantt.png)
+<p class="cap">Figure 1 — Diagramme de Gantt — planification des sprints</p>
 
 ### Conclusion du chapitre
 
-Après avoir défini le contexte, la problématique et la solution, le chapitre suivant
-détaille l'analyse des besoins et la conception du système.
+Ce chapitre a défini le cadre du projet : sa problématique, ses objectifs, ses besoins
+fonctionnels et non fonctionnels, ainsi que la méthodologie agile et la planification
+retenues. Le chapitre suivant procède à l'étude préliminaire des solutions existantes et
+justifie les choix technologiques.
 
 <div class="page-break"></div>
 
-## Chapitre 2 — Analyse et conception
+## Chapitre 2 — Étude préliminaire et technologies
 
 ### Introduction du chapitre
 
-Ce chapitre présente l'analyse des besoins, les acteurs du système, le diagramme de cas
-d'utilisation, l'architecture logicielle et la conception de la base de données.
+Avant de concevoir et de développer l'application, il est essentiel d'étudier les
+solutions déjà disponibles sur le marché, puis de choisir des technologies adaptées aux
+besoins identifiés. Ce chapitre compare brièvement TousLocation aux solutions existantes,
+puis présente et justifie les frameworks et outils retenus.
 
-### 2.1 Spécification des besoins
+### 2.1 Étude des solutions existantes et similaires
 
-**Tableau 1 — Besoins fonctionnels**
+Plusieurs catégories de solutions répondent partiellement au besoin de gestion de
+location : les ERP généralistes, les logiciels de location spécialisés du marché
+international, et les approches artisanales (papier / Excel). Le tableau ci-dessous les
+compare et positionne TousLocation.
 
-| Module | Besoin |
-| ------ | ------ |
-| Authentification | Connexion sécurisée, gestion des rôles |
-| Matériel | CRUD, images, catégories/marques/unités, calendrier de disponibilité |
-| Locations | Réservation multi-articles, TVA, paiements partiels, facture PDF |
-| Achats | Fournisseurs, commandes alimentant le stock |
-| Ventes | Vente de matériel, décrément du stock |
-| Dépenses | Saisie des charges par catégorie |
-| Ajustements | Entrée/sortie de stock valorisée |
-| Rapports | Bénéfice et locations par période |
-| Paramètres | TVA, devises, unités, catégories, marques, types de paiement |
+**Tableau 2 — Comparatif des solutions existantes**
 
-**Besoins non fonctionnels :** sécurité (authentification, autorisation par rôle,
-isolation des données), ergonomie (interface claire, responsive), performance,
-fiabilité (validation des données, intégrité du stock) et bilinguisme (FR/AR – RTL).
+| Solution | Atouts | Limites | Positionnement de TousLocation |
+| -------- | ------ | ------- | ------------------------------ |
+| Papier / Excel | Coût nul, prise en main immédiate | Erreurs, pas de contrôle de disponibilité, aucun reporting, non collaboratif | TousLocation automatise et fiabilise tout le cycle |
+| ERP généralistes (type Odoo, ERPNext) | Très complets, modulaires | Lourds, coûteux à paramétrer, surdimensionnés pour une PME de location | TousLocation est ciblé, léger et immédiatement opérationnel |
+| Logiciels de location spécialisés (solutions étrangères) | Métier bien couvert | Coûteux, en devises étrangères, peu adaptés au contexte marocain (Dirham, TVA, FR/AR) | TousLocation intègre nativement Dirham, TVA marocaine et bilinguisme |
+| Solutions SaaS de réservation génériques | Hébergées, multi-clients | Non spécialisées location de matériel, pas de gestion de stock/achats | TousLocation couvre stock, achats, ventes et place de marché |
 
-### 2.2 Acteurs du système
+Cette analyse confirme l'intérêt d'une solution **sur mesure, légère et adaptée au
+marché marocain**, couvrant l'ensemble du cycle métier tout en restant accessible
+financièrement.
 
-- **Super-administrateur** : gère les comptes managers et supervise l'ensemble.
-- **Manager** : gère son espace (matériel, locations, achats, ventes, etc.).
-- **Employé** : opère au quotidien (locations, paiements) dans l'espace du manager.
-- **Client** : consulte le catalogue et suit ses locations.
+### 2.2 Présentation des technologies et frameworks retenus
 
-### 2.3 Diagramme de cas d'utilisation
+#### 2.2.1 Frontend (React + Vite)
+
+L'interface utilisateur est construite avec **React** associé au bundler **Vite**.
+Comparé à **Angular** (plus structuré mais plus lourd) et à **Vue** (excellent mais à
+écosystème plus restreint), **React** a été retenu pour la richesse de son écosystème, sa
+grande communauté et son modèle par composants réutilisables, parfaitement adapté à une
+**Single Page Application** réactive. **Vite** offre quant à lui un démarrage et un
+rechargement à chaud très rapides, ce qui accélère sensiblement le développement.
+
+#### 2.2.2 Backend (Laravel)
+
+Le backend est développé avec **Laravel** (PHP), exposant une **API REST**. Comparé à
+**Node.js / Express** (très flexible mais moins structurant) et à **Spring Boot** (robuste
+mais plus verbeux et à courbe d'apprentissage plus longue), **Laravel** s'impose par son
+écosystème mature, son ORM **Eloquent** expressif, sa sécurité intégrée (hachage,
+validation, protection CSRF) et ses outils natifs (migrations, seeders, commandes
+Artisan, authentification Sanctum). Ces atouts permettent un développement rapide et
+fiable d'une API métier complète.
+
+#### 2.2.3 Base de données (MySQL/MariaDB)
+
+La persistance s'appuie sur **MySQL / MariaDB**, moteur **relationnel** transactionnel
+(InnoDB). Comparé à **PostgreSQL** (excellent mais ici sans besoin de ses fonctions
+avancées) et à **MongoDB** (NoSQL, inadapté à des données fortement relationnelles comme
+les locations, lignes et paiements), **MySQL** a été choisi pour la nature **relationnelle**
+du modèle (nombreuses clés étrangères et intégrité référentielle), sa parfaite intégration
+avec Laravel et sa très large diffusion sur les hébergements.
+
+### 2.3 Outils de développement et de collaboration
+
+**Tableau 3 — Outils de développement et de collaboration**
+
+| Catégorie | Outil | Usage |
+| --------- | ----- | ----- |
+| Éditeur de code | **VS Code** | Développement frontend et backend |
+| Gestion de version | **Git / GitHub** | Versionnage et historique du code |
+| Dépendances PHP | **Composer** | Installation des paquets Laravel |
+| Dépendances JS | **npm** | Installation des paquets React/Vite |
+| Test d'API | **Postman** | Vérification des endpoints REST |
+| CLI Laravel | **Artisan** | Migrations, seeders, commandes d'import |
+| Génération PDF | **dompdf** | Factures et reçus |
+| Authentification | **Sanctum** | Jetons d'accès (Bearer) |
+
+### Conclusion du chapitre
+
+L'étude préliminaire a montré la pertinence d'une solution sur mesure et a justifié le
+choix de la pile **React + Laravel + MySQL**, complétée par un outillage adapté. Le
+chapitre suivant détaille l'analyse et la conception du système.
+
+<div class="page-break"></div>
+
+## Chapitre 3 — Analyse et conception
+
+### Introduction du chapitre
+
+Ce chapitre traduit les besoins en modèles d'analyse et de conception. Il identifie les
+acteurs et leurs droits, présente les cas d'utilisation, illustre le déroulement d'une
+opération clé par un diagramme de séquence, modélise les entités métier par un diagramme
+de classes et décrit enfin le modèle physique de données.
+
+### 3.1 Identification des acteurs et leurs rôles
+
+Le système distingue quatre acteurs, dont les droits sont résumés ci-dessous.
+
+**Tableau 4 — Acteurs, rôles et droits**
+
+| Acteur | Rôle | Droits principaux |
+| ------ | ---- | ----------------- |
+| **Super-administrateur** | Supervision globale (SaaS) | Crée et gère les comptes gérants, supervise toutes les boutiques, gère les référentiels partagés |
+| **Gérant / Manager** | Responsable d'une boutique | Gère son catalogue, ses locations, achats, ventes, dépenses, ajustements, rapports et employés (dans son espace isolé) |
+| **Employé** | Opérateur quotidien | Opère selon les **modules autorisés** par le gérant : locations, paiements, matériel, etc. |
+| **Client** | Utilisateur final | S'inscrit librement, parcourt la place de marché, commande via le panier et suit ses propres locations (toutes boutiques confondues) |
+
+### 3.2 Diagrammes de cas d'utilisation
 
 Le diagramme suivant synthétise les interactions entre les acteurs et les
 fonctionnalités du système.
 
-![Figure 1 — Diagramme de cas d'utilisation](images/use-cases.png)
-<p class="cap">Figure 1 — Diagramme de cas d'utilisation</p>
+![Cas d'utilisation](images/use-cases.png)
+<p class="cap">Figure 2 — Diagramme de cas d'utilisation</p>
 
-### 2.4 Architecture de l'application (MVC)
+Pour préciser le fonctionnement attendu, deux cas d'utilisation majeurs sont décrits
+textuellement ci-dessous.
 
-L'application suit le patron **Modèle-Vue-Contrôleur** côté Laravel, complété par une
-vue **React** découplée. Le **Modèle** (Eloquent) gère les données, la **Vue** (React +
-gabarit PDF) l'affichage, et le **Contrôleur** la logique, protégé par des middlewares
-d'authentification et d'isolation multi-tenant.
+#### Cas d'utilisation « Créer une location »
 
-![Figure 2 — Architecture MVC](images/architecture-mvc.png)
-<p class="cap">Figure 2 — Architecture technique (MVC) de l'application</p>
+- **Acteur principal :** Employé (ou Gérant).
+- **Pré-conditions :** l'utilisateur est authentifié et autorisé sur le module
+  « locations » ; au moins un client et un matériel disponible existent dans la boutique.
+- **Scénario nominal :**
+  1. L'utilisateur ouvre l'écran « Locations » et lance la création d'une location.
+  2. Il sélectionne le client puis la période (date de début et date de fin).
+  3. Il ajoute un ou plusieurs articles via le sélecteur avancé.
+  4. Le système vérifie la **disponibilité** de chaque article sur la période (réservations
+     concurrentes et jours de battement).
+  5. Le système calcule automatiquement le sous-total HT, la **TVA** et le total TTC.
+  6. L'utilisateur valide ; le système enregistre la location et ses lignes dans une
+     transaction.
+- **Post-conditions :** la location est créée avec le statut initial, les articles sont
+  réservés sur la période, et la facture PDF peut être générée.
+- **Scénario alternatif :** si un article n'est pas disponible, le système le signale et
+  empêche l'enregistrement tant que le conflit n'est pas résolu.
 
-### 2.5 Conception de la base de données
+#### Cas d'utilisation « Commander via le panier (client) »
 
-La base de données adopte une **nomenclature 100 % française**. Les tables métier sont :
-`utilisateurs`, `materiels`, `locations`, `lignes_location`, `paiements`, `achats`,
-`lignes_achat`, `paiements_achat`, `ventes`, `lignes_vente`, `paiements_vente`,
-`depenses`, `ajustements_stock`, `contrats`, `fournisseurs`, ainsi que les référentiels
-`categories`, `marques`, `unites`, `devises`, `taxes` et `types_paiement`.
+- **Acteur principal :** Client.
+- **Pré-conditions :** le client est inscrit et authentifié ; la place de marché est
+  accessible.
+- **Scénario nominal :**
+  1. Le client parcourt le **catalogue multi-boutiques** et utilise la recherche et le
+     filtre par boutique.
+  2. Il ajoute un ou plusieurs articles d'une **même boutique** à son **panier**.
+  3. Il choisit une période commune (par défaut « maintenant », non modifiable vers le
+     passé).
+  4. Il confirme la commande ; le système vérifie que tous les articles appartiennent à
+     une seule boutique et contrôle leur disponibilité.
+  5. Le système crée la location, la rattache à la **boutique du produit** et la fait
+     apparaître dans « Mes locations ».
+- **Post-conditions :** la demande de location est enregistrée et visible côté client et
+  côté gérant concerné.
+- **Scénario alternatif :** si le panier contient des articles de boutiques différentes
+  ou un article indisponible, le système refuse la confirmation et en informe le client.
+
+### 3.3 Diagrammes de séquence
+
+Le diagramme de séquence ci-dessous illustre le flux complet de **création d'une
+location** depuis le panier client.
+
+![Séquence — création d'une location](images/sequence-location.png)
+<p class="cap">Figure 3 — Diagramme de séquence — création d'une location</p>
+
+Le flux se déroule ainsi : depuis le panier React, le client confirme la location ; la
+requête `POST /locations` (avec jeton Bearer) traverse les routes puis le middleware
+**Sanctum + TenantScoped** avant d'atteindre le `LocationController`. Ce dernier **valide**
+les données et les dates, charge les modèles `Materiel` concernés, vérifie l'appartenance
+à une **seule boutique** ainsi que la **disponibilité**, puis enregistre la location et ses
+lignes dans une **transaction** MySQL. Le serveur répond par un code `201` accompagné de la
+location et de ses montants, et l'interface affiche une confirmation à l'utilisateur.
+
+### 3.4 Diagramme de classes
+
+Le diagramme de classes ci-dessous modélise les entités métier (modèles Eloquent) et
+leurs associations.
+
+![Diagramme de classes UML](images/uml-class.png)
+<p class="cap">Figure 4 — Diagramme de classes (UML)</p>
+
+Les principales associations sont les suivantes : un **Utilisateur** (qui représente aussi
+une boutique pour les gérants) possède ses **Matériels** et est rattaché à des référentiels
+(`Categorie`, `Marque`, `Unite`, `Devise`, `Taxe`, `TypePaiement`). Une **Location** regroupe
+plusieurs **LigneLocation** (chacune liée à un `Materiel`) ainsi que des **Paiement**, et peut
+porter un **Contrat**. Les mêmes structures existent pour les **Achat** (avec `LigneAchat` et
+`PaiementAchat`, rattachés à un `Fournisseur`) et les **Vente** (avec `LigneVente` et
+`PaiementVente`). Les entités `Depense` et `AjustementStock` complètent le suivi de
+l'inventaire. Les attributs calculés `montant_paye`, `montant_restant` et `statut_paiement`
+sont dérivés des paiements de chaque opération.
+
+### 3.5 Modèle physique de données
+
+Le modèle physique de données adopte une **nomenclature 100 % française**.
+
+![Modèle physique de données](images/database-schema.png)
+<p class="cap">Figure 5 — Modèle physique de données</p>
+
+Les tables métier sont : `utilisateurs`, `materiels`, `locations`, `lignes_location`,
+`paiements`, `achats`, `lignes_achat`, `paiements_achat`, `ventes`, `lignes_vente`,
+`paiements_vente`, `depenses`, `ajustements_stock`, `contrats`, `fournisseurs`, ainsi que
+les référentiels `categories`, `marques`, `unites`, `devises`, `taxes` et `types_paiement`.
 
 Les **encaissements** sont modélisés par trois tables distinctes — `paiements`
 (locations), `paiements_achat` (achats) et `paiements_vente` (ventes) — ce qui permet le
-suivi des **règlements partiels** (montant payé, montant restant, statut de paiement).
-La quasi-totalité des tables porte une colonne `proprietaire_id` qui garantit
-l'**isolation des données** entre boutiques (multi-tenant).
-
-![Figure 3 — Schéma de la base de données](images/database-schema.png)
-<p class="cap">Figure 3 — Schéma de la base de données (modèle entité-association)</p>
-
-### 2.6 Diagramme de classes (UML)
-
-Le diagramme de classes ci-dessous modélise les entités métier (modèles Eloquent)
-et leurs associations : un **Utilisateur** (boutique) possède ses **Matériels** ;
-une **Location** regroupe des **LigneLocation** et des **Paiement** ; les mêmes
-structures existent pour les **Achat** et les **Vente** (avec leurs règlements).
-
-![Diagramme de classes UML](images/uml-class.png)
-<p class="cap">Figure 4 — Diagramme de classes (modèles métier)</p>
+suivi des **règlements partiels** (montant payé, montant restant, statut de paiement). La
+quasi-totalité des tables porte une colonne **`proprietaire_id`** qui garantit
+l'**isolation des données** entre boutiques (multi-tenant) : un gérant ne voit que les
+lignes dont le `proprietaire_id` correspond à sa boutique, tandis que le super-admin
+dispose d'une vue globale.
 
 ### Conclusion du chapitre
 
-L'analyse et la conception posées, le chapitre suivant aborde la réalisation effective
-de l'application.
+L'analyse et la conception étant posées — acteurs, cas d'utilisation, séquence, classes
+et modèle de données — le chapitre suivant aborde la réalisation effective de
+l'application.
 
 <div class="page-break"></div>
 
-## Chapitre 3 — Réalisation
+## Chapitre 4 — Réalisation et implémentation
 
 ### Introduction du chapitre
 
-Ce chapitre présente l'environnement et les technologies utilisés, puis détaille la
-**structure des vues** de l'application avec leurs **étapes (workflow)** et
-**fonctionnalités**, avant d'aborder la sécurité, les tests et le déploiement.
+Ce chapitre, le plus détaillé, décrit la mise en œuvre concrète de TousLocation : la
+préparation de l'environnement, l'architecture générale, l'implémentation du backend et du
+frontend illustrée par des **captures d'écran réelles**, puis les tests, la validation et
+les difficultés rencontrées.
 
-### 3.1 Environnement et outils de développement
+### 4.1 Mise en place de l'environnement de développement
 
-- **Système / poste** : ordinateur de développement, éditeur **VS Code** ;
-- **Versionnage** : **Git** ;
-- **Back-end** : PHP 8.3, Composer ; **Front-end** : Node.js, npm, Vite ;
-- **Base de données** : MySQL / MariaDB ; **Serveur** : Nginx + PHP-FPM (déploiement).
+L'environnement de développement repose sur **PHP 8.3** et **Composer** pour le backend,
+**Node.js** et **npm** pour le frontend, **MySQL** pour la base de données, le tout piloté
+depuis **VS Code**. Le backend Laravel est servi via `php artisan serve` et le frontend
+React via `npm run dev` (Vite). La base est créée et alimentée par les migrations et
+seeders Artisan.
 
-### 3.2 Technologies utilisées
+```bash
+# Backend (Laravel)
+composer install
+php artisan migrate --seed
+php artisan serve
 
-**Tableau 2 — Outils et technologies utilisés**
+# Frontend (React + Vite)
+npm install
+npm run dev
+```
 
-| Catégorie | Technologie | Usage |
-| --------- | ----------- | ----- |
-| Back-end | **Laravel** (PHP 8.3) | API REST, ORM Eloquent |
-| Authentification | Laravel **Sanctum** | Jetons d'accès (Bearer) |
-| PDF | dompdf | Factures |
-| Front-end | **React 18 + Vite** | Interface SPA |
-| HTTP | Axios | Appels API |
-| i18n | react-i18next | Français / Arabe (RTL) |
-| Base de données | **MySQL / MariaDB** | Persistance |
-| Déploiement | Nginx, PHP-FPM | Mise en production |
+### 4.2 Architecture générale de l'application
 
-### 3.3 Structure des vues : étapes et fonctionnalités
+L'application suit une architecture **découplée** : une **SPA React** dialogue avec une
+**API REST Laravel** par échanges JSON authentifiés par **jeton Bearer (Sanctum)** ;
+côté serveur, les contrôleurs orchestrent la logique, l'ORM **Eloquent** accède à la base
+**MySQL**, et des gabarits Blade génèrent les documents PDF.
 
-L'interface, à **nomenclature 100 % française**, se répartit en **trois espaces** :
-un **espace public** (accueil, connexion, vitrine des boutiques, inscription client),
-un **espace staff** (super-admin, gérant, employé) organisé autour d'un **layout** commun
-(barre latérale filtrée par permissions) et un **espace client** (place de marché et
-« Mes locations »). La figure ci-dessous présente l'arborescence des vues, suivie du
-détail des principaux écrans (workflow + fonctionnalités).
+![Architecture MVC](images/architecture-mvc.png)
+<p class="cap">Figure 6 — Architecture technique (MVC) de l'application</p>
 
-![Figure 5 — Arborescence des vues](images/ui-structure.png)
-<p class="cap">Figure 5 — Arborescence des vues de l'interface</p>
+Le frontend joue le rôle de **Vue** principale ; il consomme le **Contrôleur** (API REST)
+qui pilote le **Modèle** (Eloquent). Chaque requête métier traverse le middleware
+d'authentification **Sanctum** et le trait **TenantScoped** qui assure l'isolation
+multi-boutiques. Les gabarits **Blade** servent uniquement à produire les factures et
+reçus PDF via **dompdf**.
 
-<div class="view">
-<h4>Vue « Connexion »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>L'utilisateur saisit son e-mail et son mot de passe.</li>
-<li>L'application envoie les identifiants à l'API et reçoit un <em>jeton</em>.</li>
-<li>Le jeton est conservé et l'utilisateur est redirigé vers le tableau de bord.</li>
-</ol>
-<strong>Fonctionnalités :</strong> authentification sécurisée, gestion des erreurs,
-bascule de langue (FR/AR).
-</div>
+### 4.3 Implémentation du backend
 
-<div class="view">
-<h4>Vue « Tableau de bord »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>Chargement des indicateurs clés (revenus, locations actives, stock).</li>
-<li>Affichage du <strong>tableau Kanban</strong> des locations par statut.</li>
-<li>L'utilisateur fait <strong>glisser une carte</strong> vers une autre colonne pour
-changer le statut (confirmer / retourner / annuler).</li>
-</ol>
-<strong>Fonctionnalités :</strong> KPI, Kanban interactif (glisser-déposer), création
-rapide d'une location.
-</div>
+Le backend Laravel est entièrement écrit selon une **nomenclature française** : modèles
+Eloquent (`Utilisateur`, `Materiel`, `Location`, `Achat`, `Vente`…), contrôleurs REST,
+routes en français (`/connexion`, `/materiels`, `/locations`, `/achats`, `/ventes`…). La
+sécurité repose sur **Sanctum** (jetons), une **validation systématique** des requêtes,
+et le trait **`TenantScoped`** qui filtre automatiquement les données par
+`proprietaire_id`. La génération des documents PDF s'appuie sur **dompdf**, et des
+**commandes Artisan** d'import (`demo:makita`, `demo:transpalette`) permettent de charger
+des catalogues réels via le service `CatalogImporter`. À la création d'une boutique, le
+service `TenantProvisioner` initialise automatiquement ses devises, taxes, unités, types
+de paiement et catégories.
 
-<div class="view">
-<h4>Vue « Matériel »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>Consultation du catalogue (recherche, filtres par catégorie/marque).</li>
-<li>Ajout / modification d'un article (nom, prix, image, capacité…).</li>
-<li>Consultation du <strong>calendrier de disponibilité</strong> d'un article.</li>
-</ol>
-<strong>Fonctionnalités :</strong> CRUD, upload d'images (avec aperçu/lightbox),
-calendrier de disponibilité, délai d'indisponibilité après location.
-</div>
+Extrait simplifié du trait **TenantScoped**, qui restreint chaque requête à la boutique
+de l'utilisateur connecté :
 
-<div class="view">
-<h4>Vue « Locations »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>Choix du client et des dates.</li>
-<li>Sélection des articles via un <strong>sélecteur avancé</strong> (recherche,
-disponibilité en temps réel).</li>
-<li>Calcul automatique du total HT, de la TVA et du TTC.</li>
-<li>Enregistrement, puis suivi des <strong>paiements partiels</strong> et génération de
-la <strong>facture PDF</strong>.</li>
-</ol>
-<strong>Fonctionnalités :</strong> réservation multi-articles, contrôle de
-disponibilité, TVA, encaissements partiels (table `paiements`), facture PDF, changement
-de statut.
-</div>
+```php
+trait TenantScoped
+{
+    // Restreint une requête aux données de la boutique courante
+    protected function scopeToTenant($query)
+    {
+        $user = request()->user();
+        if ($user->isSuperAdmin()) {
+            return $query; // le super-admin voit tout
+        }
+        return $query->where('proprietaire_id', $this->ownerId());
+    }
 
-<div class="view">
-<h4>Vue « Place de marché » (espace client)</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>Le client parcourt un <strong>catalogue multi-boutiques</strong> (recherche par
-mot-clé, filtre par boutique).</li>
-<li>Il ajoute un ou plusieurs articles d'une <strong>même boutique</strong> à son
-<strong>panier</strong>.</li>
-<li>Il confirme la location sur une période commune ; la demande est rattachée à la
-boutique du produit et apparaît dans « Mes locations ».</li>
-</ol>
-<strong>Fonctionnalités :</strong> place de marché (catalogue multi-boutiques), recherche
-et filtre boutique, <strong>panier multi-articles</strong>, libre-inscription du client.
-</div>
+    protected function ownerId(): int
+    {
+        $user = request()->user();
+        return $user->isManager() ? $user->id : $user->proprietaire_id;
+    }
+}
+```
 
-<div class="view">
-<h4>Vues « Achats / Ventes / Dépenses / Ajustements »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li><strong>Achat</strong> : sélection du fournisseur et des articles → à la
-<strong>réception</strong>, le stock est <strong>alimenté</strong> ; suivi des
-<strong>encaissements partiels</strong> (table `paiements_achat`).</li>
-<li><strong>Vente</strong> : sélection des articles → le stock est
-<strong>décrémenté</strong> ; encaissements partiels (table `paiements_vente`) et
-génération d'un <strong>reçu PDF</strong>.</li>
-<li><strong>Dépense</strong> : saisie d'une charge (catégorie, montant, date).</li>
-<li><strong>Ajustement</strong> : entrée/sortie de stock avec motif et valorisation.</li>
-</ol>
-<strong>Fonctionnalités :</strong> mouvements de stock cohérents et tracés, valorisation
-au prix d'achat, encaissements partiels sur achats et ventes, reçu PDF de vente,
-suppression sécurisée (réajustement du stock).
-</div>
+Extrait simplifié d'un contrôleur (création d'une location avec validation, contrôle de
+disponibilité et transaction) :
 
-<div class="view">
-<h4>Vue « Rapports »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>Sélection d'une période (date de début / fin).</li>
-<li>Consultation du rapport de <strong>bénéfice</strong> (revenus − coûts) ou du rapport
-de <strong>locations</strong>.</li>
-</ol>
-<strong>Fonctionnalités :</strong> bénéfice net et marge, chiffre d'affaires, encaissé /
-reste à encaisser, répartition par statut, matériel le plus loué.
-</div>
+```php
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'client_id'  => 'required|exists:utilisateurs,id',
+        'date_debut' => 'required|date',
+        'date_fin'   => 'required|date|after_or_equal:date_debut',
+        'lignes'     => 'required|array|min:1',
+    ]);
 
-<div class="view">
-<h4>Vue « Paramètres »</h4>
-<strong>Workflow :</strong>
-<ol>
-<li>Navigation par <strong>onglets</strong> (TVA, devises, unités, catégories, marques,
-types de paiement).</li>
-<li>Ajout / modification / suppression d'un élément de référentiel.</li>
-</ol>
-<strong>Fonctionnalités :</strong> gestion centralisée des référentiels, TVA et devise
-« par défaut » uniques par espace.
-</div>
+    return DB::transaction(function () use ($data) {
+        $location = Location::create([
+            'proprietaire_id' => $this->ownerId(),
+            'client_id'       => $data['client_id'],
+            'date_debut'      => $data['date_debut'],
+            'date_fin'        => $data['date_fin'],
+            'statut'          => 'pending',
+        ]);
+        // ... création des lignes + contrôle de disponibilité
+        return response()->json($location, 201);
+    });
+}
+```
 
-Au-delà des écrans courants, l'application fonctionne en mode **multi-boutiques (SaaS)** :
-les **comptes gérants** ne sont créés que par le **super-admin**, tandis que les
-**clients** s'inscrivent librement (sans rattachement obligatoire à une boutique).
-Chaque nouvelle boutique est initialisée automatiquement (devises, TVA marocaines,
-unités, types de paiement, catégories) et l'application peut **importer des catalogues
-réels** (Makita, Transpalette) au moyen de **commandes Artisan** dédiées.
+### 4.4 Implémentation du frontend web
 
-### 3.4 Sécurité et isolation multi-tenant
+Le frontend est une **SPA React** propulsée par **Vite**, utilisant **React Router** pour
+la navigation, **Axios** (avec un **intercepteur** ajoutant le jeton Bearer et redirigeant
+sur expiration) pour les appels API, et **react-i18next** pour le bilinguisme
+**français/arabe (RTL)**. L'interface se répartit en **trois espaces** : un **espace
+public**, un **espace staff** (super-admin, gérant, employé) organisé autour d'un *layout*
+commun à barre latérale filtrée par permissions, et un **espace client** (place de marché
+et « Mes locations »).
 
-L'application est **multi-tenant** : chaque boutique (gérant) dispose d'un espace
-**isolé**. Un trait `TenantScoped` filtre automatiquement les données par
-`proprietaire_id` et bloque tout accès croisé (réponse 404). L'authentification se fait
-par **jeton (Sanctum)**, les mots de passe sont **hachés**, et chaque action est
-contrôlée selon le **rôle** et, pour les employés, selon les **modules** autorisés. La
-**validation côté serveur** est systématique.
+#### Espace public
 
-Le diagramme de séquence suivant illustre la création d'une location depuis le
-panier client (place de marché) :
+L'espace public accueille les visiteurs, présente les boutiques et permet la connexion et
+l'inscription des clients.
 
-![Diagramme de séquence — création d'une location](images/sequence-location.png)
-<p class="cap">Figure 6 — Séquence : création d'une location (panier client)</p>
+![Page d'accueil](images/screens/01-accueil.png)
+<p class="cap">Figure 7 — Page d'accueil (espace public)</p>
 
-### 3.5 Tests et déploiement
+La **page d'accueil** présente l'application et oriente le visiteur vers la connexion, la
+vitrine des boutiques ou l'inscription, avec un sélecteur de langue (FR/AR).
 
-L'application a fait l'objet de **tests fonctionnels** sur chaque module (création,
-modification, suppression, contrôle de disponibilité, calculs de TVA, mouvements de
-stock, rapports). Le **déploiement** s'effectue sur un serveur **Linux (Nginx +
-PHP-FPM)** ; un **assistant de déploiement** automatise l'installation, la configuration
-et la mise en ligne.
+![Page de connexion](images/screens/02-connexion.png)
+<p class="cap">Figure 8 — Page de connexion</p>
 
-**Tableau 3 — Comptes de démonstration**
+La **page de connexion** authentifie l'utilisateur : à la saisie de l'e-mail et du mot de
+passe, l'application reçoit un jeton et redirige vers l'espace correspondant au rôle.
 
-| Rôle | Identifiant | Mot de passe |
-| ---- | ----------- | ------------ |
-| Super-administrateur | admin@touslocations.com | 1234567890 |
-| Manager | manager@touslocations.com | 1234567890 |
-| Employé | employe@touslocations.com | 1234567890 |
-| Client | client@touslocations.com | 1234567890 |
+![Boutiques publiques](images/screens/03-boutiques.png)
+<p class="cap">Figure 9 — Vitrine des boutiques publiques</p>
 
-### 3.6 Difficultés rencontrées et solutions
+La **vitrine des boutiques** liste les boutiques disponibles et permet d'accéder à leur
+catalogue avant même de s'inscrire.
 
-| Difficulté | Solution apportée |
-| ---------- | ----------------- |
-| Calcul de la disponibilité réelle sur une période | Prise en compte des réservations concurrentes et d'un délai de battement, vérifiée côté serveur. |
-| Isolation des données entre boutiques | Colonne `proprietaire_id` + filtrage automatique (trait `TenantScoped`). |
-| Cohérence du stock (achats/ventes/ajustements) | Centralisation des mouvements et transactions de base de données. |
-| Bilinguisme et sens RTL (arabe) | Bibliothèque d'internationalisation + adaptation CSS pour la direction droite-à-gauche. |
-| Gestion des images et PDF | Système de stockage de Laravel + lien public. |
+#### Espace staff (gestion)
+
+L'espace staff regroupe les écrans de gestion quotidienne de la boutique.
+
+![Tableau de bord](images/screens/04-tableau-bord.png)
+<p class="cap">Figure 10 — Tableau de bord (espace staff)</p>
+
+Le **tableau de bord** affiche les indicateurs clés (revenus, locations, stock) et un
+suivi visuel des locations par statut, point d'entrée de la gestion.
+
+![Catalogue du matériel](images/screens/05-materiels.png)
+<p class="cap">Figure 11 — Catalogue du matériel</p>
+
+L'écran **Matériel** permet la gestion complète du catalogue (CRUD, images, catégories,
+marques, unités) ainsi que la consultation de la disponibilité.
+
+![Gestion des locations](images/screens/06-locations.png)
+<p class="cap">Figure 12 — Gestion des locations</p>
+
+L'écran **Locations** orchestre la réservation multi-articles, le contrôle de
+disponibilité, le calcul de la TVA, le suivi des paiements partiels et la génération de la
+facture PDF.
+
+![Gestion des achats](images/screens/07-achats.png)
+<p class="cap">Figure 13 — Gestion des achats</p>
+
+L'écran **Achats** gère les commandes auprès des fournisseurs : à la réception, le stock
+est alimenté et les encaissements partiels sont suivis.
+
+![Gestion des ventes](images/screens/08-ventes.png)
+<p class="cap">Figure 14 — Gestion des ventes</p>
+
+L'écran **Ventes** enregistre les ventes de matériel avec décrément du stock, suivi des
+encaissements et génération d'un reçu PDF.
+
+![Rapports et statistiques](images/screens/09-rapports.png)
+<p class="cap">Figure 15 — Rapports et statistiques</p>
+
+L'écran **Rapports** restitue, sur une période choisie, le bénéfice (revenus − coûts), le
+chiffre d'affaires, l'encaissé / le reste à encaisser et la répartition des locations.
+
+![Paramètres](images/screens/10-parametres.png)
+<p class="cap">Figure 16 — Paramètres et référentiels</p>
+
+L'écran **Paramètres** centralise la gestion des référentiels (TVA, devises, unités,
+catégories, marques, types de paiement) par onglets.
+
+#### Espace client
+
+L'espace client expose la place de marché et le suivi des locations du client.
+
+![Place de marché client (panier)](images/screens/11-magasin.png)
+<p class="cap">Figure 17 — Place de marché client (panier)</p>
+
+La **place de marché** propose un catalogue multi-boutiques avec recherche et filtre par
+boutique ; le client ajoute plusieurs articles d'une même boutique à son **panier** avant
+de confirmer sa location sur une période commune.
+
+![Mes locations (client)](images/screens/12-mes-locations.png)
+<p class="cap">Figure 18 — Mes locations (espace client)</p>
+
+L'écran **Mes locations** permet au client de suivre l'état de ses demandes et locations,
+toutes boutiques confondues.
+
+### 4.5 Tests et validation
+
+L'application a fait l'objet de **tests fonctionnels manuels** sur l'ensemble des
+workflows. Les opérations **CRUD** de chaque module (matériel, locations, achats, ventes,
+dépenses, ajustements, référentiels) ont été vérifiées (création, lecture, modification,
+suppression). L'**isolation multi-tenant** a été contrôlée en s'assurant qu'un gérant ne
+peut accéder aux données d'une autre boutique (réponse 404 sur accès croisé). Le **contrôle
+de disponibilité** a été validé en testant des réservations concurrentes et le délai de
+battement. Enfin, la **validation des paiements** partiels (montant payé, restant, statut)
+et les calculs de TVA ont été confirmés sur les locations, achats et ventes. L'ensemble de
+ces tests a été **validé** avec succès.
+
+### 4.6 Difficultés rencontrées et solutions apportées
+
+**Tableau 5 — Difficultés rencontrées et solutions apportées**
+
+| Problème | Solution apportée |
+| -------- | ----------------- |
+| Calcul de la disponibilité réelle sur une période | Prise en compte des réservations concurrentes et d'un **délai de battement** (jours tampon), vérifiée côté serveur. |
+| Isolation des données entre boutiques | Colonne `proprietaire_id` + filtrage automatique via le trait **TenantScoped** (404 sur accès croisé). |
+| Cohérence d'une nomenclature française | Élaboration d'un référentiel de nomenclature unique appliqué à toutes les couches (tables, modèles, contrôleurs, routes, vues). |
+| Commande client multi-boutiques | Contrôle imposant un **panier d'une seule boutique** ; la location est rattachée à la boutique du produit. |
+| Déploiement de l'application | Procédure d'installation et de configuration automatisée (migrations, seeders, build du frontend). |
 
 ### Conclusion du chapitre
 
-Ce chapitre a présenté la réalisation concrète de l'application, de l'environnement
-technique à la structure des vues, en passant par la sécurité et le déploiement.
+Ce chapitre a présenté la réalisation concrète de l'application : environnement,
+architecture, implémentation du backend et du frontend illustrée par les écrans réels,
+tests et difficultés. Tous les modules planifiés ont été développés et validés.
 
 <div class="page-break"></div>
 
-## Conclusion générale et perspectives
+## Conclusion et perspectives
+
+### Bilan du projet
 
 Ce projet de fin d'études a permis de concevoir et de réaliser **TousLocation**, une
 application web complète et professionnelle de gestion de location de matériel. De
-l'analyse du besoin au déploiement, l'ensemble du cycle de développement a été couvert,
-en mobilisant des technologies modernes (Laravel, React, MySQL) et des bonnes pratiques
+l'analyse du besoin au déploiement, l'ensemble du cycle de développement a été couvert en
+mobilisant des technologies modernes (**Laravel, React, MySQL**) et de bonnes pratiques
 (architecture MVC, API REST, sécurité, multi-tenant). **Tous les objectifs fixés ont été
 atteints** : la gestion complète du cycle de location, les **encaissements partiels** sur
 les locations, achats et ventes, les **documents PDF** (facture et reçu), la **place de
 marché client** multi-boutiques (catalogue, recherche, panier multi-articles), l'isolation
 des données par boutique (SaaS) et l'interface bilingue français/arabe.
 
-Sur le plan **personnel**, ce travail a renforcé mes compétences en développement
-full-stack, en conception de bases de données et en conduite de projet, tout en
-développant mon autonomie et ma rigueur.
+### Limites et améliorations futures
 
-Plusieurs **perspectives** d'évolution sont envisageables :
+Plusieurs perspectives d'évolution sont envisageables :
 
 - intégration du **paiement en ligne** ;
-- **graphiques** d'évolution (revenus / bénéfice) et export des rapports ;
-- **notifications automatiques** (rappels de retour) ;
-- développement d'une **application mobile** native.
+- **notifications automatiques** (confirmations, rappels de retour, alertes de retard) ;
+- développement d'une **application mobile** native ;
+- **export Excel** et graphiques d'évolution des rapports (revenus, bénéfice).
+
+### Compétences développées
+
+Sur le plan personnel, ce travail a renforcé mes compétences en **développement
+full-stack** (React et Laravel), en **conception de bases de données** relationnelles, en
+**conception logicielle** (UML, architecture MVC, API REST) et en **conduite de projet
+agile**, tout en développant mon autonomie, ma rigueur et ma capacité à résoudre des
+problèmes techniques concrets.
 
 En définitive, TousLocation constitue une base solide, fonctionnelle et évolutive,
 répondant concrètement aux besoins des entreprises de location de matériel.
 
 <div class="page-break"></div>
 
-## Références
+## Références bibliographiques et webographiques
 
 - Documentation officielle **Laravel** — https://laravel.com/docs
 - Documentation officielle **React** — https://react.dev
@@ -595,13 +885,20 @@ répondant concrètement aux besoins des entreprises de location de matériel.
 
 ## Annexes
 
-- **Annexe A** — Schéma complet de la base de données (Figure 3).
-- **Annexe B** — Diagramme de cas d'utilisation (Figure 1), architecture MVC (Figure 2) et
-  diagramme de classes UML (Figure 4).
-- **Annexe C** — Arborescence des vues (Figure 5) et diagramme de séquence (Figure 6).
-- **Annexe D** — Captures d'écran de l'application *(à insérer : connexion, tableau de
-  bord/Kanban, catalogue, création de location, facture PDF, rapports)*.
-- **Annexe E** — Extraits de code *(à insérer : contrôleur, modèle Eloquent, composant
-  React)*.
+- **Annexe A — Comptes de démonstration**
+
+**Tableau 6 — Comptes de démonstration**
+
+| Rôle | Identifiant | Mot de passe |
+| ---- | ----------- | ------------ |
+| Super-administrateur | admin@touslocations.com | 1234567890 |
+| Manager | manager@touslocations.com | 1234567890 |
+| Employé | employe@touslocations.com | 1234567890 |
+| Client | client@touslocations.com | 1234567890 |
+
+- **Annexe B — Extraits de code** : trait `TenantScoped` et contrôleur de création de
+  location (section 4.3), illustrant l'isolation multi-tenant et la logique métier.
+- **Annexe C — Dépôt du code source** : l'intégralité du code (backend Laravel et frontend
+  React) est versionnée sous **Git** et hébergée sur **GitHub**.
 
 <p class="center" style="margin-top:30px;color:#888;font-size:11px;">— Fin du rapport —</p>
