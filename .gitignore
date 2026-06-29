@@ -26,3 +26,6 @@ touslocation-deploy.zip
 Thumbs.db
 .idea/
 .vscode/
+
+# PowerPoint lock files
+~$*.pptx
